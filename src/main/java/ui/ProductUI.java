@@ -15,9 +15,9 @@ public class ProductUI {
     public static void menu(Scanner scanner) {
         while (true) {
             System.out.println("\n--- Livros ---");
-            System.out.println("1. Cadastrar Livro");
-            System.out.println("2. Listar todos os Livros");
-            System.out.println("3. Atualizar Livro");
+            System.out.println("1. Cadastrar novos Livros");
+            System.out.println("2. Listar Livros Cadastrados");
+            System.out.println("3. Atualizar Informações dos Livros");
             System.out.println("4. Excluir Livros");
             System.out.println("5. Voltar para o Menu Principal");
             System.out.print("Escolha: ");

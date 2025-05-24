@@ -12,10 +12,10 @@ public class SupplierUI {
     public static void menu(Scanner scanner) {
         while (true) {
             System.out.println("\n--- Fornecedores ---");
-            System.out.println("1. Cadastrar Fornecedor");
-            System.out.println("2. Listar todos os Fornecedores");
-            System.out.println("3. Atualizar Fornecedor");
-            System.out.println("4. Excluir Fornecedor");
+            System.out.println("1. Cadastrar Fornecedores");
+            System.out.println("2. Listar Fornecedores");
+            System.out.println("3. Atualizar Fornecedores");
+            System.out.println("4. Excluir Fornecedores");
             System.out.println("5. Voltar para o Menu Principal");
             System.out.print("Escolha: ");
             int opcao = scanner.nextInt();
