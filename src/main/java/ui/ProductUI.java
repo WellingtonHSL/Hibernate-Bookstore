@@ -14,21 +14,21 @@ public class ProductUI {
 
     public static void menu(Scanner scanner) {
         while (true) {
-            System.out.println("\n--- Produtos ---");
-            System.out.println("1. Cadastrar");
-            System.out.println("2. Listar");
-            System.out.println("3. Atualizar");
-            System.out.println("4. Excluir");
-            System.out.println("5. Voltar");
+            System.out.println("\n--- Livros ---");
+            System.out.println("1. Cadastrar Livro");
+            System.out.println("2. Listar todos os Livros");
+            System.out.println("3. Atualizar Livro");
+            System.out.println("4. Excluir Livros");
+            System.out.println("5. Voltar para o Menu Principal");
             System.out.print("Escolha: ");
             int opcao = scanner.nextInt();
             scanner.nextLine();
 
             switch (opcao) {
-                case 1 -> cadastrar(scanner);
-                case 2 -> listar();
-                case 3 -> atualizar(scanner);
-                case 4 -> excluir(scanner);
+                case 1 -> registerProduct(scanner);
+                case 2 -> listAllProduct();
+                case 3 -> updateProduct(scanner);
+                case 4 -> deleteProduct(scanner);
                 case 5 -> {
                     return;
                 }
@@ -37,40 +37,63 @@ public class ProductUI {
         }
     }
 
-    private static void cadastrar(Scanner scanner) {
-        List<Supplier> fornecedores = supplierService.findAll();
-        if (fornecedores.isEmpty()) {
+    private static void registerProduct(Scanner scanner) {
+        List<Supplier> suppliers = supplierService.findAll();
+        if (suppliers.isEmpty()) {
             System.out.println("Cadastre um fornecedor antes.");
             return;
         }
 
         System.out.println("Escolha o fornecedor:");
-        for (int i = 0; i < fornecedores.size(); i++) {
-            System.out.println(i + " - " + fornecedores.get(i).getName());
+        for (int i = 0; i < suppliers.size(); i++) {
+            System.out.println(i + " - " + suppliers.get(i).getName());
         }
         int escolha = scanner.nextInt();
         scanner.nextLine();
-        if (escolha < 0 || escolha >= fornecedores.size()) {
+        if (escolha < 0 || escolha >= suppliers.size()) {
             System.out.println("Fornecedor inválido.");
             return;
         }
 
-        System.out.print("Nome do produto: ");
-        String nome = scanner.nextLine();
-        System.out.print("Preço: ");
-        double preco = scanner.nextDouble();
-        scanner.nextLine();
+        String name = null;
+        double price = 0.0;
+
+        while (true) {
+            try {
+                System.out.print("Nome do Livro: ");
+                name = scanner.nextLine();
+
+                Product teste = new Product();
+                teste.setBookName(name);
+                break;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Erro: " + e.getMessage());
+            }
+        }
+
+        while (true) {
+            try {
+                System.out.print("Preço: ");
+                price = scanner.nextDouble();
+                scanner.nextLine();
+                Product teste = new Product();
+                teste.setPrice(price);
+                break;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Erro: " + e.getMessage());
+            }
+        }
 
         Product p = new Product();
-        p.setBookName(nome);
-        p.setPrice(preco);
-        p.setSupplier(fornecedores.get(escolha));
+        p.setBookName(name);
+        p.setPrice(price);
+        p.setSupplier(suppliers.get(escolha));
 
         productService.save(p);
         System.out.println("Produto cadastrado.");
     }
 
-    private static void listar() {
+    private static void listAllProduct() {
         List<Product> lista = productService.findAll();
         if (lista.isEmpty()) {
             System.out.println("Nenhum produto cadastrado.");
@@ -80,7 +103,7 @@ public class ProductUI {
         }
     }
 
-    private static void atualizar(Scanner scanner) {
+    private static void updateProduct(Scanner scanner) {
         System.out.print("ID do produto: ");
         long id = scanner.nextLong();
         scanner.nextLine();
@@ -90,17 +113,37 @@ public class ProductUI {
             return;
         }
 
-        System.out.print("Novo nome: ");
-        p.setBookName(scanner.nextLine());
-        System.out.print("Novo preço: ");
-        p.setPrice(scanner.nextDouble());
-        scanner.nextLine();
+        while (true) {
+            try {
+                System.out.print("Novo nome: ");
+                String novoNome = scanner.nextLine();
+                p.setBookName(novoNome);
+                break;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Erro: " + e.getMessage());
+            }
+        }
+
+        while (true) {
+            try {
+                System.out.print("Novo preço: ");
+                double newPrice = scanner.nextDouble();
+                scanner.nextLine();
+                p.setPrice(newPrice);
+                break;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Erro: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Erro: Insira um número válido para o preço.");
+                scanner.nextLine();
+            }
+        }
 
         productService.update(p);
         System.out.println("Produto atualizado.");
     }
 
-    private static void excluir(Scanner scanner) {
+    private static void deleteProduct(Scanner scanner) {
         System.out.print("ID do produto: ");
         long id = scanner.nextLong();
         scanner.nextLine();

@@ -53,7 +53,7 @@ public class Product {
 
     public void setPrice(Double price) {
         if (price < 1.0) {
-            throw new IllegalArgumentException("Preço do livro deve ser maior que R$ 1.0");
+            throw new IllegalArgumentException("Preço do livro deve ser maior que R$ 1,00");
         }
         this.price = price;
     }
