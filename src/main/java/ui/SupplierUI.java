@@ -16,7 +16,7 @@ public class SupplierUI {
             System.out.println("2. Listar Fornecedores");
             System.out.println("3. Atualizar Fornecedores");
             System.out.println("4. Excluir Fornecedores");
-            System.out.println("5. Voltar para o Menu Principal");
+            System.out.println("5. Voltar");
             System.out.print("Escolha: ");
             int opcao = scanner.nextInt();
             scanner.nextLine();
@@ -24,11 +24,9 @@ public class SupplierUI {
             switch (opcao) {
                 case 1 -> register(scanner);
                 case 2 -> listAll();
-                case 3 -> updadte(scanner);
+                case 3 -> update(scanner);
                 case 4 -> delete(scanner);
-                case 5 -> {
-                    return;
-                }
+                case 5 -> { return; }
                 default -> System.out.println("Opção inválida.");
             }
         }
@@ -38,13 +36,13 @@ public class SupplierUI {
         Supplier s = new Supplier();
 
         while (true) {
-            try {
-                System.out.print("Nome do fornecedor: ");
-                String nome = scanner.nextLine();
+            System.out.print("Nome do fornecedor: ");
+            String nome = scanner.nextLine();
+            if (supplierService.existsByName(nome)) {
+                System.out.println("Erro: Fornecedor já cadastrado.");
+            } else {
                 s.setName(nome);
                 break;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
             }
         }
 
@@ -62,7 +60,7 @@ public class SupplierUI {
         }
     }
 
-    private static void updadte(Scanner scanner) {
+    private static void update(Scanner scanner) {
         System.out.print("ID do fornecedor: ");
         long id = scanner.nextLong();
         scanner.nextLine();
@@ -74,13 +72,13 @@ public class SupplierUI {
         }
 
         while (true) {
-            try {
-                System.out.print("Novo nome: ");
-                String novoNome = scanner.nextLine();
+            System.out.print("Atualizar nome do Fornecedor: ");
+            String novoNome = scanner.nextLine();
+            if (supplierService.existsByName(novoNome)) {
+                System.out.println("Erro: Nome já existe.");
+            } else {
                 s.setName(novoNome);
                 break;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
             }
         }
 

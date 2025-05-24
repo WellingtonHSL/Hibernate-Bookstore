@@ -15,6 +15,16 @@ public class ProductService {
         session.close();
     }
 
+    public boolean existsByName(String name) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Long count = session.createQuery(
+                        "select count(p.id) from Product p where lower(p.bookName) = :name", Long.class)
+                .setParameter("name", name.toLowerCase())
+                .uniqueResult();
+        session.close();
+        return count != null && count > 0;
+    }
+
     public List<Product> findAll() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<Product> list = session.createQuery("from Product", Product.class).getResultList();

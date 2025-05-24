@@ -15,6 +15,16 @@ public class SupplierService {
         session.close();
     }
 
+    public boolean existsByName(String name) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Long count = session.createQuery(
+                        "select count(s.id) from Supplier s where lower(s.name) = :name", Long.class)
+                .setParameter("name", name.toLowerCase())
+                .uniqueResult();
+        session.close();
+        return count != null && count > 0;
+    }
+
     public List<Supplier> findAll() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<Supplier> list = session.createQuery("from Supplier", Supplier.class).getResultList();

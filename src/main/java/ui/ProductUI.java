@@ -29,9 +29,7 @@ public class ProductUI {
                 case 2 -> listAllProduct();
                 case 3 -> updateProduct(scanner);
                 case 4 -> deleteProduct(scanner);
-                case 5 -> {
-                    return;
-                }
+                case 5 -> { return; }
                 default -> System.out.println("Opção inválida.");
             }
         }
@@ -48,39 +46,38 @@ public class ProductUI {
         for (int i = 0; i < suppliers.size(); i++) {
             System.out.println(i + " - " + suppliers.get(i).getName());
         }
+
         int escolha = scanner.nextInt();
         scanner.nextLine();
+
         if (escolha < 0 || escolha >= suppliers.size()) {
             System.out.println("Fornecedor inválido.");
             return;
         }
 
-        String name = null;
-        double price = 0.0;
+        String name;
+        double price;
 
         while (true) {
-            try {
-                System.out.print("Nome do Livro: ");
-                name = scanner.nextLine();
+            System.out.print("Nome do Livro: ");
+            name = scanner.nextLine();
 
-                Product teste = new Product();
-                teste.setBookName(name);
+            if (productService.existsByName(name)) {
+                System.out.println("Já existe um livro com esse nome.");
+            } else {
                 break;
-            } catch (IllegalArgumentException e) {
-                System.out.println("Erro: " + e.getMessage());
             }
         }
 
         while (true) {
             try {
-                System.out.print("Preço: ");
+                System.out.print("Preço do Livro: ");
                 price = scanner.nextDouble();
                 scanner.nextLine();
-                Product teste = new Product();
-                teste.setPrice(price);
                 break;
-            } catch (IllegalArgumentException e) {
-                System.out.println("Erro: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Insira um número válido para o preço.\nDeve ser maior ou igual a R$1,00.");
+                scanner.nextLine();
             }
         }
 
@@ -90,70 +87,68 @@ public class ProductUI {
         p.setSupplier(suppliers.get(escolha));
 
         productService.save(p);
-        System.out.println("Produto cadastrado.");
+        System.out.println("Livro cadastrado.");
     }
 
     private static void listAllProduct() {
-        List<Product> lista = productService.findAll();
-        if (lista.isEmpty()) {
-            System.out.println("Nenhum produto cadastrado.");
+        List<Product> list = productService.findAll();
+        if (list.isEmpty()) {
+            System.out.println("Nenhum livro cadastrado.");
         } else {
             System.out.println("--- LISTA DE LIVROS ---");
-            lista.forEach(System.out::println);
+            list.forEach(System.out::println);
         }
     }
 
     private static void updateProduct(Scanner scanner) {
-        System.out.print("ID do produto: ");
+        System.out.print("ID do Livro: ");
         long id = scanner.nextLong();
         scanner.nextLine();
         Product p = productService.findById(id);
         if (p == null) {
-            System.out.println("Produto não encontrado.");
+            System.out.println("Livro não encontrado.");
             return;
         }
 
         while (true) {
-            try {
-                System.out.print("Novo nome: ");
-                String novoNome = scanner.nextLine();
-                p.setBookName(novoNome);
+            System.out.print("Atualizar nome do Livro: ");
+            String newNome = scanner.nextLine();
+            if (productService.existsByName(newNome)) {
+                System.out.println("Já existe um livro com esse nome.");
+            } else {
+                p.setBookName(newNome);
                 break;
-            } catch (IllegalArgumentException e) {
-                System.out.println("Erro: " + e.getMessage());
             }
         }
 
         while (true) {
             try {
-                System.out.print("Novo preço: ");
+                System.out.print("Atualizar preço do Livro: ");
                 double newPrice = scanner.nextDouble();
                 scanner.nextLine();
                 p.setPrice(newPrice);
                 break;
-            } catch (IllegalArgumentException e) {
-                System.out.println("Erro: " + e.getMessage());
             } catch (Exception e) {
-                System.out.println("Erro: Insira um número válido para o preço.");
+                System.out.println("Insira um número válido.");
                 scanner.nextLine();
             }
         }
 
         productService.update(p);
-        System.out.println("Produto atualizado.");
+        System.out.println("Livro atualizado.");
     }
 
     private static void deleteProduct(Scanner scanner) {
-        System.out.print("ID do produto: ");
+        System.out.print("ID do livro: ");
         long id = scanner.nextLong();
         scanner.nextLine();
         Product p = productService.findById(id);
         if (p == null) {
-            System.out.println("Produto não encontrado.");
+            System.out.println("Livro não encontrado.");
             return;
         }
 
         productService.delete(p);
-        System.out.println("Produto excluído.");
+        System.out.println("Livro excluído.");
     }
 }
