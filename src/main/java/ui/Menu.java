@@ -1,10 +1,13 @@
 package ui;
 
+import db.CreateDB;
+
 import java.util.Scanner;
 
 public class Menu {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        CreateDB.createDatabase();
 
         while (true) {
             System.out.println("\n=== MENU PRINCIPAL ===");
